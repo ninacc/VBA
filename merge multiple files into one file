@@ -1,0 +1,19 @@
+Sub merge()
+Dim myfile, mypath, wb
+Application.ScreenUpdating = False
+Sheet1.UsedRange.Offset(1, 0).Clear  '清除除表头之外的所有内容
+mypath = ThisWorkbook.Path           '找到当前工作簿的路径
+myfile = Dir(mypath & "\*.xlsx*")     '遍历当前文件夹下的Excel文件
+Do While myfile <> ""                '当找到的文件不为空时
+If myfile <> ThisWorkbook.Name Then   '当找到的文件不是当前Excel工作簿时
+Set wb = GetObject(mypath & "\" & myfile)   '得到dir找到的工作簿的内容，设为wb
+With wb.Sheets(1)              '对找到的工作簿的sheet1进行操作
+'复制wb的sheet1除第一行的所有内容
+.UsedRange.Offset(1, 0).Copy Sheet1.Range("A" & Sheet1.UsedRange.Rows.Count + 1)
+End With
+wb.Close False      '关闭wb工作簿且不保存
+End If
+myfile = Dir          '寻找下一个Excel工作簿
+Loop
+Application.ScreenUpdating = True
+End Sub
