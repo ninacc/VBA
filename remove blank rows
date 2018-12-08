@@ -1,0 +1,6 @@
+Sub RemoveBlankRows()
+'PURPOSE: Deletes any row with blank cells located inside a designated range
+Dim rng As Range
+Set rng = Range("A1:A10").SpecialCells(xlCellTypeBlanks)
+rng.EntireRow.Delete
+End Sub
