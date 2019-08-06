@@ -1,0 +1,95 @@
+Sub PWS_SaveFileToDesktop()
+'
+' SaveFileToDesktop Macro
+'
+Application.ScreenUpdating = False
+Application.DisplayAlerts = False
+
+Dim folder As String, path As String, count As Integer
+folder = filepath & Format(Now(), "yyyy") & "WK" & Format(Now(), "ww")
+If Len(Dir(folder, vbDirectory)) = 0 Then
+    MkDir folder
+End If
+
+path = folder & "\*.xlsx"
+Filename = Dir(path)
+Do While Filename <> ""
+    count = count + 1
+    Filename = Dir()
+Loop
+count = count + 1
+
+Worksheets("MAIN_PWS").Activate
+Cells.EntireColumn.AutoFit
+Sheets("MAIN_PWS").UsedRange.Copy
+Set NewBook = Workbooks.Add
+NewBook.Worksheets("Sheet1").[A1].PasteSpecial (xlPasteValues)
+Rows("1:5").Delete Shift:=xlUp
+Columns("B:D").Delete Shift:=xlToLeft
+Columns("D:G").Delete Shift:=xlToLeft
+Columns("H:AC").Delete Shift:=xlToLeft
+Columns("I:M").Delete Shift:=xlToLeft
+Columns("J:K").Delete Shift:=xlToLeft
+Columns("K:O").Delete Shift:=xlToLeft
+Columns("L:Y").Delete Shift:=xlToLeft
+Columns("N:P").Delete Shift:=xlToLeft
+Range("F1") = "INDEX_SOLD_AFTER"
+Range("G1") = "INDEX_FCT_AFTER"
+Cells.EntireColumn.AutoFit
+Range("B:D").NumberFormat = "0"
+Range("F:G").NumberFormat = "0.0"
+Range("H:M").NumberFormat = "0"
+Range("E:G").HorizontalAlignment = xlCenter
+
+Range("A1:M1").Select
+With Selection.Borders(xlEdgeBottom)
+    .LineStyle = xlContinuous
+    .ColorIndex = 0
+    .TintAndShade = 0
+    .Weight = xlMedium
+End With
+
+With Selection.Interior
+        .Pattern = xlSolid
+        .PatternColorIndex = xlAutomatic
+        .Color = 6299648
+        .TintAndShade = 0
+        .PatternTintAndShade = 0
+End With
+
+With Selection.Font
+        .ThemeColor = xlThemeColorDark1
+        .TintAndShade = 0
+        .Bold = True
+End With
+
+Dim rng1, rng2, rng3 As Range
+
+Set rng1 = Range(Range("E1"), Range("E1").End(xlDown).Address)
+Set rng2 = Range(Range("K1"), Range("K1").End(xlDown).Address)
+Set rng3 = Range(Range("M1"), Range("M1").End(xlDown).Address)
+
+Union(rng1, rng2, rng3).Select
+With Selection.Interior
+    .Pattern = xlSolid
+    .PatternColorIndex = xlAutomatic
+    .Color = 65535
+    .TintAndShade = 0
+    .PatternTintAndShade = 0
+End With
+With Selection.Font
+        .ColorIndex = xlAutomatic
+        .TintAndShade = 0
+End With
+
+Cells.EntireColumn.AutoFit
+ActiveWorkbook.SaveAs folder & "\PWS_YR" & Format(Now(), "yyyy") & "_WK" & Format(Now(), "ww") & "_" & count & ".xlsx"
+ActiveWorkbook.SaveAs "C:\Users\cerwinl\Desktop\PWS_YR" & Format(Now(), "yyyy") & "_WK" & Format(Now(), "ww") & "_" & count & ".xlsx"
+ActiveWorkbook.Close
+
+Application.ScreenUpdating = True
+Application.DisplayAlerts = True
+
+'
+End Sub
+
